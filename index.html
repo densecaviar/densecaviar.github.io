@@ -4,21 +4,132 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experiments, Explanations</title>
-    
+    <style>
+        /* Force font import directly inside the CSS to bypass connection cache blocks */
+        @import url('https://googleapis.com');
+
+        :root {
+            --ink: #0f1012;
+            --graphite: #1c1e21;
+            --text: #f2f2f0;
+            --muted: #a3a5a8;
+        }
+        
+        * { box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; }
+        
+        body {
+            font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            background: var(--ink);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        #waves {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(180deg, var(--ink) 0%, var(--graphite) 100%);
+        }
+
+        main {
+            max-width: 44rem;
+            padding: clamp(4rem, 12vh, 8rem) clamp(1.25rem, 6vw, 4rem);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        h2.tagline {
+            font-family: "Syne", Impact, sans-serif; /* Hard fallback to impact if rendering glitches */
+            font-weight: 400; /* Forces the widest, most stylized version of Syne */
+            font-size: clamp(1.0rem, 3.8vw, 2.8rem);
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-top: 1.rem;
+            margin-bottom: 1.rem;
+            text-transform: none;
+        }
+
+        .fields {
+            font-family: "DM Sans", system-ui, sans-serif;
+            font-weight: 200;
+            font-size: 0.90rem;
+            color: var(--muted); 
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.25rem 1.35rem;
+            margin: 0;
+        }
+
+        p { 
+            font-size: 1.15rem; 
+            color: var(--muted); 
+            margin: 0 auto; 
+            max-width: 34rem; 
+        }
+    </style>
 </head>
 
 <body>
+    <canvas id="waves" aria-hidden="true"></canvas>
 
-    <h2>Cybersecurity · AI · Psychology · Evolution · Computer Science</h2>
-<br>
-<h2>Experiments, explanations, and things I accidentally broke along the way. </h2>
-    
-    
+    <main>
+        <h1 class="fields">
+            <span>Cybersecurity</span><span>Machine Learning</span><span>Psychology</span><span>Evolution</span><span>Computer Science</span>
+        </h1>
 
-    <p>
-        Hi! My name is Amodh. Welcome to my personal sandbox. 
-    </p>
+        <h2 class="tagline">Welcome to my personal Sandbox</h2>
 
+        <pre>  big fan of natural stupidity and artificial intelligence.</pre>
+    </main>
 
+    <script>
+        const canvas = document.getElementById('waves');
+        const ctx = canvas.getContext('2d');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            if (reduceMotion) draw(0);
+        }
+        window.addEventListener('resize', resize);
+
+        const layers = [
+            { color: 'rgba(1, 282, 222, 0.07)', y: 0.66, amp: 50, speed: 0.005, len: 0.004 },
+            { color: 'rgba(1, 282, 242, 0.10)', y: 0.74, amp: 75, speed: 0.005, len: 0.005 },
+            { color: 'rgba(1, 248, 242, 0.13)', y: 0.82, amp: 50, speed: 0.005, len: 0.006 }
+        ];
+
+        function draw(t) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const L of layers) {
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height);
+                for (let x = 0; x <= canvas.width; x += 6) {
+                    const y = canvas.height * L.y
+                        + Math.sin(x * L.len + t * L.speed) * L.amp
+                        + Math.sin(x * L.len * 2.3 + t * L.speed * 1.7) * L.amp * 0.4;
+                    ctx.lineTo(x, y);
+                }
+                ctx.lineTo(canvas.width, canvas.height);
+                ctx.closePath();
+                ctx.fillStyle = L.color;
+                ctx.fill();
+            }
+            if (!reduceMotion) requestAnimationFrame(draw);
+        }
+
+        resize();
+        if (!reduceMotion) requestAnimationFrame(draw);
+    </script>
 </body>
 </html>
