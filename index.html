@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiments, Explanations</title>
+    <title>Personal Sandbox</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;400;500&family=Gochi+Hand&family=Poiret+One&display=swap');
 
@@ -116,6 +116,32 @@
             .fields { top: 3.6rem; padding: 0 1.5rem; justify-content: center; gap: 0.4rem 2.5rem; }
         }
 
+
+        .quote {
+            position: absolute;
+
+            left: 50%;
+            transform: translateX(-50%);
+
+            width: min(38rem, 80vw);
+
+            text-align: center;
+            white-space: pre-wrap;
+
+            font-family: "Helvetica";
+            font-size: clamp(1.2rem, 1.9vw, 1.2rem);
+            line-height: 1.4;
+
+            color: rgba(230, 194, 128, 0.75);
+
+            pointer-events: none;
+
+            /* TEMPORARILY VISIBLE WHILE WE TEST POSITIONING */
+            opacity: 0.89;
+        }
+
+
+
         .fields span {
             color: rgba(244, 234, 214, 0.6);   /* soft ivory, translucent */
             letter-spacing: 0.24em;
@@ -149,7 +175,7 @@
 
         /* THE DESCENT: scroll length. Replace with your project sections later;
            the depth gauge reads the page's total scroll height automatically. */
-        .descent { height: 500vh; width: 100%; }
+        .descent { height: 800vh; width: 100%; }
 
         /* DEPTH GAUGE */
         #gauge {
@@ -188,6 +214,21 @@
 
     <div class="descent" aria-hidden="true"></div>
 
+    <pre class="quote" data-depth="100"> The greatest enemy of knowledge is not ignorance, it is the illusion of knowledge.
+                                                                            — Stephen Hawking</pre>
+
+
+    <pre class="quote" data-depth="500"> The first principle is that you must not fool yourself, and you are the easiest person to fool.
+                                                                            — Richard Feynman</pre>                       
+
+    <pre class="quote" data-depth="300"> If you're going to try, go all the way. Otherwise don't even start.
+                                                                             - Charles Bukowski</pre>
+    
+
+    <pre class="quote" data-depth="900"> Creativity requires the courage to let go of certainties. 
+                                                                            - Erich Fromm</pre>
+
+    <pre class="quote" data-depth="700"> Set your life on fire. Seek those who fan your flames.                                                                 - Rumi</pre>                                                                          
     <script>
         const canvas = document.getElementById('waves');
         const ctx = canvas.getContext('2d');
@@ -202,7 +243,7 @@
 
         const PX_PER_M = 6;   // scroll pixels per meter (lower = faster descent); shared with the depth gauge
         const SURFACE = 0.66; // where the water surface sits on the first screen (0 = top, 1 = bottom); shared with the gauge
-        const DEEPEST = 0.75; // how dark the water gets at great depth (0 = never darkens, 1 = black)
+        const DEEPEST = 0.97; // how dark the water gets at great depth (0 = never darkens, 1 = black)
 
         // Your original swells. off = distance below the surface line (fraction of screen height)
         const layers = [
@@ -331,6 +372,27 @@
                 g.stroke();
                 g.fillText(depth + ' m', x - 30, mid);
             }
+
+            const quotes = document.querySelectorAll('.quote');
+
+            function positionQuotes() {
+                const H = window.innerHeight;
+
+                quotes.forEach(quote => {
+                    const depth = Number(quote.dataset.depth);
+
+                    // The document position where the water surface begins
+                    const surface = H * SURFACE;
+
+                    // Convert depth in meters into pixels
+                    const position = surface + depth * PX_PER_M;
+
+                    quote.style.top = `${position}px`;
+                });
+            }
+
+            positionQuotes();
+
 
             function queue() {
                 if (!queued) { queued = true; requestAnimationFrame(render); }
