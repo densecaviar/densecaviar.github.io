@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experiments, Explanations</title>
     <style>
-        /* Force font import directly inside the CSS to bypass connection cache blocks */
-        @import url('https://googleapis.com');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;400;500&family=Gochi+Hand&display=swap');
 
         :root {
             --ink: #0f1012;
@@ -14,18 +13,19 @@
             --text: #f2f2f0;
             --muted: #a3a5a8;
         }
-        
+
         * { box-sizing: border-box; }
-        html, body { height: 100%; margin: 0; }
-        
+        html, body { margin: 0; }
+
         body {
             font-family: "DM Sans", system-ui, -apple-system, sans-serif;
             color: var(--text);
             background: var(--ink);
             line-height: 1.6;
+            min-height: 100%;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
         }
 
         #waves {
@@ -38,58 +38,134 @@
         }
 
         main {
+            width: 100%;
             max-width: 44rem;
-            padding: clamp(4rem, 12vh, 8rem) clamp(1.25rem, 6vw, 4rem);
+            padding: clamp(6rem, 26vh, 16rem) clamp(1.25rem, 6vw, 3rem);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
         }
 
-        h2.tagline {
-            font-family: "Syne", Impact, sans-serif; /* Hard fallback to impact if rendering glitches */
-            font-weight: 400; /* Forces the widest, most stylized version of Syne */
-            font-size: clamp(1.0rem, 3.8vw, 2.8rem);
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            margin-top: 1.rem;
-            margin-bottom: 1.rem;
-            text-transform: none;
+        .tagline {
+            font-family: "Gochi Hand";
+            font-weight: 200;
+            font-size: clamp(2.4rem, 5vw, 3.4rem);
+            line-height: 1;
+            letter-spacing: 0.006em;
+            margin-top: 0rem;
+            margin-bottom: 2rem;
+            white-space: pre-wrap;
+
+            background:
+                /* two white waves of different widths and speeds, drifting past each other */
+                linear-gradient(90deg, transparent 46%, rgba(255, 255, 255, 1) 50%, transparent 54%),
+                linear-gradient(90deg, transparent 38%, rgba(255, 255, 255, 0.7) 50%, transparent 62%),
+                /* solid champagne gold */
+                linear-gradient(#d4af37, #d4af37);
+
+            background-size: 9em 100%, 15em 100%, 100% 100%;
+            background-repeat: repeat-x, repeat-x, no-repeat;
+            background-position: var(--w1) 0, var(--w2) 0, 0 0;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            animation:
+                drift1 2.8s linear infinite,
+                drift2 4.6s linear infinite,
+                glow 3.6s ease-in-out infinite alternate;
+        }
+
+        /* each wave gets its own position so they move independently */
+        @property --w1 { syntax: '<length>'; inherits: false; initial-value: 0px; }
+        @property --w2 { syntax: '<length>'; inherits: false; initial-value: 0px; }
+
+        /* distances equal one tile width, so each loop is seamless */
+        @keyframes drift1 { to { --w1: 9em; } }
+        @keyframes drift2 { to { --w2: -15em; } }
+
+        /* the gold breathes with a soft glow */
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.15)); }
+            to   { filter: drop-shadow(0 0 14px rgba(255, 225, 140, 0.5)); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .tagline { animation: none; }
         }
 
         .fields {
+            position: absolute;          /* pinned near the top; scrolls away with the surface */
+            top: 1.4rem;
+            left: 0;
+            right: 0;
+            padding: 0 clamp(1.5rem, 7vw, 6rem);
             font-family: "DM Sans", system-ui, sans-serif;
             font-weight: 200;
-            font-size: 0.90rem;
-            color: var(--muted); 
+            font-size: 0.72rem;
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.25rem 1.35rem;
+            justify-content: space-between;   /* spread across the full width, away from the center */
+            gap: 0.4rem 2rem;
             margin: 0;
+            pointer-events: none;
         }
 
-        p { 
-            font-size: 1.15rem; 
-            color: var(--muted); 
-            margin: 0 auto; 
-            max-width: 34rem; 
+        @media (max-width: 40rem) {
+            .fields { justify-content: center; gap: 0.4rem 2.5rem; }
+        }
+
+        .fields span {
+            color: rgba(244, 234, 214, 0.6);   /* soft ivory, translucent */
+            letter-spacing: 0.24em;
+        }
+
+        p {
+            font-size: 1.15rem;
+            color: var(--muted);
+            margin: 0 auto;
+            max-width: 34rem;
+        }
+
+        /* THE DESCENT: scroll length. Replace with your project sections later;
+           the depth gauge reads the page's total scroll height automatically. */
+        .descent { height: 500vh; width: 100%; }
+
+        /* DEPTH GAUGE */
+        #gauge {
+            position: fixed;
+            top: 0;
+            right: 0.75rem;
+            width: 76px;
+            height: 100%;
+            pointer-events: none;
+            -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+            mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
         }
     </style>
 </head>
 
 <body>
     <canvas id="waves" aria-hidden="true"></canvas>
+    <canvas id="gauge" aria-hidden="true"></canvas>
 
     <main>
-        <h1 class="fields">
-            <span>Cybersecurity</span><span>Machine Learning</span><span>Psychology</span><span>Evolution</span><span>Computer Science</span>
-        </h1>
+        <div class="fields">
+            <span>Cybersecurity</span>
+            <span>Machine Learning</span>
+            <span>Psychology</span>
+            <span>Evolution</span>
+            <span>Computer Science</span>
+        </div>
 
-        <h2 class="tagline">Welcome to my personal Sandbox</h2>
+        <pre>big fan of </pre>
+        <pre class="tagline">natural stupidity & artificial intelligence</pre>
 
-        <pre>  big fan of natural stupidity and artificial intelligence.</pre>
+        
     </main>
+
+    <div class="descent" aria-hidden="true"></div>
 
     <script>
         const canvas = document.getElementById('waves');
@@ -103,33 +179,147 @@
         }
         window.addEventListener('resize', resize);
 
+        const PX_PER_M = 6;   // scroll pixels per meter (lower = faster descent); shared with the depth gauge
+        const SURFACE = 0.66; // where the water surface sits on the first screen (0 = top, 1 = bottom); shared with the gauge
+        const DEEPEST = 0.75; // how dark the water gets at great depth (0 = never darkens, 1 = black)
+
+        // Your original swells. off = distance below the surface line (fraction of screen height)
         const layers = [
-            { color: 'rgba(1, 282, 222, 0.07)', y: 0.66, amp: 50, speed: 0.005, len: 0.004 },
-            { color: 'rgba(1, 282, 242, 0.10)', y: 0.74, amp: 75, speed: 0.005, len: 0.005 },
-            { color: 'rgba(1, 248, 242, 0.13)', y: 0.82, amp: 50, speed: 0.005, len: 0.006 }
+            { color: 'rgba(1, 220, 225, 0.13)', off: 0,    amp: 50, speed: 0.005, len: 0.004 },
+            { color: 'rgba(1, 245, 223, 0.09)', off: 0.08, amp: 75, speed: 0.005, len: 0.005 },
+            { color: 'rgba(11, 220, 224, 0.13)', off: 0.16, amp: 50, speed: 0.005, len: 0.006 }
         ];
 
+        function trace(L, t, base, W) {
+            for (let x = 0; x <= W; x += 6) {
+                const y = base
+                    + Math.sin(x * L.len + t * L.speed) * L.amp
+                    + Math.sin(x * L.len * 2.3 + t * L.speed * 1.7) * L.amp * 0.4;
+                ctx.lineTo(x, y);
+            }
+        }
+
         function draw(t) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const W = canvas.width, H = canvas.height, sy = window.scrollY;
+            const surface = H * SURFACE - sy;   // screen y of 0 m, same zero as the depth gauge
+            ctx.clearRect(0, 0, W, H);
+
+            // water body: the same graphite as the page, below the surface line
+            const bg = ctx.createLinearGradient(0, 0, 0, H);
+            bg.addColorStop(0, '#0f1012');
+            bg.addColorStop(1, '#1c1e21');
+            ctx.beginPath();
+            ctx.moveTo(0, H);
+            trace(layers[0], t, surface, W);
+            ctx.lineTo(W, H);
+            ctx.closePath();
+            ctx.fillStyle = bg;
+            ctx.fill();
+
+            // the three swells, filled all the way down
             for (const L of layers) {
                 ctx.beginPath();
-                ctx.moveTo(0, canvas.height);
-                for (let x = 0; x <= canvas.width; x += 6) {
-                    const y = canvas.height * L.y
-                        + Math.sin(x * L.len + t * L.speed) * L.amp
-                        + Math.sin(x * L.len * 2.3 + t * L.speed * 1.7) * L.amp * 0.4;
-                    ctx.lineTo(x, y);
-                }
-                ctx.lineTo(canvas.width, canvas.height);
+                ctx.moveTo(0, H);
+                trace(L, t, surface + L.off * H, W);
+                ctx.lineTo(W, H);
                 ctx.closePath();
                 ctx.fillStyle = L.color;
                 ctx.fill();
             }
+
+            // light fades with depth: darken each row by how deep it is
+            const dark = ctx.createLinearGradient(0, 0, 0, H);
+            const N = 16;
+            for (let i = 0; i <= N; i++) {
+                const d = Math.max(0, (sy + H * i / N - H * SURFACE) / PX_PER_M);
+                const a = DEEPEST * (1 - Math.exp(-d / 300));
+                dark.addColorStop(i / N, 'rgba(2, 6, 14, ' + a.toFixed(3) + ')');
+            }
+            ctx.fillStyle = dark;
+            ctx.fillRect(0, 0, W, H);
+
             if (!reduceMotion) requestAnimationFrame(draw);
         }
 
+        window.addEventListener('scroll', () => { if (reduceMotion) draw(0); }, { passive: true });
+
         resize();
         if (!reduceMotion) requestAnimationFrame(draw);
+
+        /* DEPTH GAUGE: a ruler that slides past a fixed marker as you scroll */
+        (function () {
+            const gauge = document.getElementById('gauge');
+            const g = gauge.getContext('2d');
+            const MINOR = 5;        // small etch every 5 m
+            const MAJOR = 25;       // long etch + label every 25 m
+            let W, H, dpr, queued = false;
+
+            function size() {
+                dpr = window.devicePixelRatio || 1;
+                W = gauge.clientWidth;
+                H = gauge.clientHeight;
+                gauge.width = W * dpr;
+                gauge.height = H * dpr;
+                g.setTransform(dpr, 0, 0, dpr, 0, 0);
+                render();
+            }
+
+            function render() {
+                queued = false;
+                const sy = window.scrollY;
+                const mid = H / 2;
+                const x = W - 6;
+                const surfaceY = H * SURFACE - sy;       // where 0 m sits on screen
+                const dTop = (0 - surfaceY) / PX_PER_M;  // depth at top of screen
+                const dBot = (H - surfaceY) / PX_PER_M;  // depth at bottom of screen
+
+                g.clearRect(0, 0, W, H);
+                g.lineWidth = 1;
+                g.strokeStyle = 'rgba(255,255,255,0.35)';
+                g.fillStyle = 'rgba(255,255,255,0.5)';
+                g.font = '13px "Gochi Hand", cursive';
+                g.textAlign = 'right';
+                g.textBaseline = 'middle';
+
+                // main line starts at the surface
+                g.beginPath();
+                g.moveTo(x + 0.5, Math.max(0, surfaceY));
+                g.lineTo(x + 0.5, H);
+                g.stroke();
+
+                // etches
+                const first = Math.max(0, Math.ceil(dTop / MINOR) * MINOR);
+                for (let d = first; d <= dBot; d += MINOR) {
+                    const y = Math.round(d * PX_PER_M + surfaceY) + 0.5;
+                    const major = d % MAJOR === 0;
+                    g.beginPath();
+                    g.moveTo(x, y);
+                    g.lineTo(x - (major ? 14 : 6), y);
+                    g.stroke();
+                    if (major && Math.abs(y - mid) > 20) g.fillText(d + '', x - 20, y);
+                }
+
+                // current depth marker
+                const depth = Math.max(0, Math.round((mid - surfaceY) / PX_PER_M));
+                g.strokeStyle = 'rgba(255,255,255,0.9)';
+                g.fillStyle = 'rgba(255,255,255,0.95)';
+                g.font = '16px "Gochi Hand", cursive';
+                g.beginPath();
+                g.moveTo(x + 4, mid + 0.5);
+                g.lineTo(x - 24, mid + 0.5);
+                g.stroke();
+                g.fillText(depth + ' m', x - 30, mid);
+            }
+
+            function queue() {
+                if (!queued) { queued = true; requestAnimationFrame(render); }
+            }
+
+            window.addEventListener('scroll', queue, { passive: true });
+            window.addEventListener('resize', size);
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(render);
+            size();
+        })();
     </script>
 </body>
 </html>
