@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experiments, Explanations</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;400;500&family=Gochi+Hand&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;400;500&family=Gochi+Hand&family=Poiret+One&display=swap');
 
         :root {
             --ink: #0f1012;
@@ -22,7 +22,7 @@
             color: var(--text);
             background: var(--ink);
             line-height: 1.6;
-            min-height: 100%;
+            min-height: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -40,7 +40,7 @@
         main {
             width: 100%;
             max-width: 44rem;
-            padding: clamp(6rem, 26vh, 16rem) clamp(1.25rem, 6vw, 3rem);
+            padding: clamp(8rem, 36vh, 22rem) clamp(1.25rem, 6vw, 3rem);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -100,25 +100,44 @@
             top: 1.4rem;
             left: 0;
             right: 0;
-            padding: 0 clamp(1.5rem, 7vw, 6rem);
+            padding: 0 1.1rem 0 clamp(16rem, 26vw, 24rem);   /* far from the name on the left, flush to the right corner */
             font-family: "DM Sans", system-ui, sans-serif;
             font-weight: 200;
             font-size: 0.72rem;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;   /* spread across the full width, away from the center */
-            gap: 0.4rem 2rem;
+            justify-content: flex-end;   /* bunched toward the right corner */
+            gap: 0.4rem 2.4rem;
             margin: 0;
             pointer-events: none;
         }
 
-        @media (max-width: 40rem) {
-            .fields { justify-content: center; gap: 0.4rem 2.5rem; }
+        @media (max-width: 75rem) {
+            .fields { top: 3.6rem; padding: 0 1.5rem; justify-content: center; gap: 0.4rem 2.5rem; }
         }
 
         .fields span {
             color: rgba(244, 234, 214, 0.6);   /* soft ivory, translucent */
             letter-spacing: 0.24em;
+        }
+
+        /* name: small signature in the top-left corner */
+        .intro {
+            position: absolute;
+            top: 0.9rem;
+            left: 1.1rem;
+            margin: 0;
+            font-family: "Poiret One", sans-serif;
+            font-weight: 400;
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            letter-spacing: 0.01em;
+            line-height: 1.1;
+            color: rgba(250, 246, 238, 0.95);
+        }
+
+        .lead {
+            margin: 0 0 1.6rem;
+            color: rgba(250, 246, 238, 0.95);   /* ivory white, same as the name */
         }
 
         p {
@@ -159,7 +178,9 @@
             <span>Computer Science</span>
         </div>
 
-        <pre>big fan of </pre>
+        <h1 class="intro">Amodh Durve.</h1>
+
+        <pre class="lead">big fan of</pre>
         <pre class="tagline">natural stupidity & artificial intelligence</pre>
 
         
