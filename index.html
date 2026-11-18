@@ -212,9 +212,8 @@ main { width: 100%; padding: calc(7rem + var(--qx) + clamp(15rem, 54vh, 32rem) +
   <p class="path">projects/malware-detector-ml</p>
   <h2>Malware Detection with Machine Learning</h2>
   <ul class="pts">
-    <li>Built a machine learning classifier using Gradient Boosted Decision Trees to distinguish between benign and malicious Windows PE files.</li>
+    <li>Built a machine learning classifier using Gradient Boosted Decision Trees using LightGBM binary classification model to distinguish between benign and malicious Windows PE files.</li>
     <li>Extracted and prepared 32 unique numerical features from Windows PE files, including entropy, file size, imported functions, and file metadata</li>
-    <li>Implemented it with LightGBM binary classification model to distinguish between benign and malicious files.</li>
     <li>Evaluated performance using accuracy, precision, recall, F1 score, ROC AUC, and confusion matrices, achieving 94.11% test accuracy and 98.59% ROC AUC.</li>
     <li>Analyzed feature importance using LightGBM's gain and split-count metrics to investigate which file characteristics contributed most to the model's predictions.</li>
   </ul>
