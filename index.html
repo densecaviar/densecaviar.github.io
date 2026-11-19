@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<!-- you read the source. respect. say hi: amodhdurve@gmail.com -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amodh Durve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Poiret+One&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fafafa; --ink: #1b1c1f; --muted: #7a7d82; --soft: #5c5f64; --hot: #e11d2a;
+  --bit-rgb: 150,153,158; --hot-rgb: 225,29,42;
+  --hero: url("hero.png"); /* put your image next to index.html with this name */
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+:root[data-dark] { --bg: #0e0f11; --ink: #ececee; --muted: #8c8f94; --soft: #b4b7bc; }
+::selection { background: var(--hot); color: #fff; }
+.toast { position: fixed; left: 1.1rem; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); z-index: 30; pointer-events: none; font: 400 .78rem/1.4 var(--mono); color: var(--muted); opacity: 0; transition: opacity .5s; }
+.toast.on { opacity: 1; }
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { transition: background .6s, color .6s; font-family: "DM Sans", system-ui, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.6; display: flex; flex-direction: column; align-items: center; }
+.hero { position: absolute; top: calc(7rem + var(--qx) + env(safe-area-inset-top, 0px)); left: 0; right: 0; height: clamp(15rem, 54vh, 32rem); z-index: -1; pointer-events: none; will-change: transform, opacity; }
+.hero::before { content: ""; position: absolute; inset: -8% 12%; background: radial-gradient(closest-side, rgba(var(--hot-rgb), .10), transparent 72%); }
+.hero::after { content: ""; position: absolute; z-index: 2; inset: 0; background: var(--hero, none) center / contain no-repeat; filter: drop-shadow(0 1.5rem 2rem rgba(0,0,0,.18)); }
+/* word and binary stream, passing behind the image */
+.waves { position: absolute; z-index: 1; left: 0; top: -14%; width: 100%; height: 128%; pointer-events: none;
+  -webkit-mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent); mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent); }
+
+.fields { position: absolute; top: 1.4rem; left: 0; right: 0; padding: 0 1.1rem; font-size: .78rem; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .4rem 2.4rem; pointer-events: none; }
+.fields span { color: var(--muted); letter-spacing: .1em; opacity: 0; transform: translateY(6px); transition: opacity .9s ease, transform .9s ease; }
+.fields.on span { opacity: 1; transform: none; }
+.fields.on span:nth-child(2) { transition-delay: .3s; }
+.fields.on span:nth-child(3) { transition-delay: .6s; }
+@media (max-width: 60rem) { .fields { top: calc(5.4rem + var(--qx)); padding: 0 1.5rem; justify-content: center; gap: .4rem 2rem; } }
+
+main { width: 100%; padding: calc(7rem + var(--qx) + clamp(15rem, 54vh, 32rem) + 4rem + var(--qz)) 1.1rem 0; }
+.who { position: absolute; top: calc(.9rem + env(safe-area-inset-top, 0px)); left: 1.1rem; min-height: 3.1rem; font: 400 .8rem/1.6 var(--mono); }
+.name { margin: .15rem 0 0; font: 400 1.5rem/1.1 "Poiret One", sans-serif; letter-spacing: .03em; color: var(--ink); }
+.term { width: 100%; margin: 0; text-align: left; font: 400 .95rem/1.9 var(--mono); min-height: 7.4rem; }
+@media (max-width: 23rem) { .term { min-height: 9.6rem; } }
+.line { min-height: 1.9em; white-space: pre-wrap; word-break: break-word; }
+.pu { color: var(--muted); }
+.ps { color: var(--hot); margin: 0 .7ch 0 .3ch; }
+.cmd { color: var(--ink); }
+.out { color: var(--muted); }
+.ls { display: flex; flex-wrap: wrap; gap: 0 2.5ch; }
+.caret { display: inline-block; width: .6ch; height: 1.1em; vertical-align: text-bottom; background: var(--hot); animation: blink 1.1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.descent { height: 450vh; width: 100%; }
+.at { position: absolute; left: 50%; transform: translateX(-50%); width: min(38rem, 80vw); margin: 0; text-align: center; }
+
+/* the project trunk: a hairline track with plain red liquid flowing down it */
+.tree { position: absolute; left: 1.1rem; width: 1px; background: rgba(var(--bit-rgb), .35); pointer-events: none; }
+.tree b { display: block; width: 2px; margin-left: -.5px; height: 0; border-radius: 0 0 1px 1px; background: var(--hot); }
+
+.at.project { left: 4.2rem; transform: none; width: min(36rem, calc(100vw - 5.6rem)); text-align: left; }
+.project .limb { position: absolute; left: -3.1rem; top: -37px; width: 54px; height: 60px; overflow: visible; pointer-events: none; }
+.limb .br { fill: none; stroke: rgba(var(--bit-rgb), .35); stroke-width: 1; }
+.limb .liq { fill: none; stroke: var(--hot); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset .45s ease-out .25s; }
+.project.hit .limb .liq { stroke-dashoffset: 0; transition-delay: 0s; }
+.pts { list-style: none; margin: 0; padding: 0; }
+.pts li { position: relative; margin: 0 0 .7rem; padding-left: 1.7ch; font-size: 1.14rem; line-height: 1.55; color: var(--soft); }
+.pts li::before { content: "\2013"; position: absolute; left: 0; font-family: var(--mono); font-weight: 600; color: var(--hot); opacity: 0; transition: opacity .3s; }
+.pts li.show::before { opacity: 1; }
+.project .ghost { visibility: hidden; }
+.project .typed { position: absolute; inset: 0 0 0 1.7ch; }
+.project .tags, .project .view { opacity: 0; transition: opacity .5s, color .25s, border-color .25s; }
+.project.done .tags, .project.done .view { opacity: 1; }
+.project .path { font: 400 .85rem/1 var(--mono); letter-spacing: .08em; color: var(--hot); margin: 0 0 1rem; }
+.project h2 { margin: 0 0 .9rem; font: 400 clamp(2.3rem, 4.4vw, 3.1rem)/1.1 "Poiret One", sans-serif; letter-spacing: .01em; }
+.project .desc { margin: 0; font-size: 1.05rem; line-height: 1.6; color: var(--soft); }
+.project .tags { margin: 1rem 0 0; font: 400 .86rem/1.6 var(--mono); letter-spacing: .04em; color: var(--muted); }
+.project .view { display: inline-block; margin-top: 1.1rem; color: var(--muted); text-decoration: none; font-size: 1.05rem; letter-spacing: .04em; padding: .3rem 0; border-bottom: 1px solid transparent; }
+.project .view:hover { color: var(--hot); border-color: var(--hot); }
+.project .view:focus-visible { outline: 2px solid var(--hot); outline-offset: 4px; color: var(--hot); }
+.exp h2 { margin-bottom: .4rem; }
+.exp .when { margin: 0 0 1rem; font: 400 .9rem/1.5 var(--mono); letter-spacing: .04em; color: var(--muted); }
+
+/* A second typed terminal sits in the scroll sequence, after the four project write-ups. */
+.at.workterm { left: 4.2rem; transform: none; width: min(36rem, calc(100vw - 5.6rem)); text-align: left; font: 400 .95rem/1.9 var(--mono); }
+.workterm .line { min-height: 1.9em; }
+.workterm .ls { gap: 0 2.5ch; }
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+
+.say { margin: 0 0 1.2rem; font: 400 clamp(2.2rem, 4.6vw, 3.2rem)/1.1 "Poiret One", sans-serif; letter-spacing: .01em; }
+.links { display: flex; justify-content: center; gap: 2.2rem; }
+.links a { color: var(--muted); text-decoration: none; font-size: .95rem; letter-spacing: .04em; padding: .4rem 0; border-bottom: 1px solid transparent; transition: color .25s, border-color .25s; }
+.links a:hover { color: var(--hot); border-color: var(--hot); }
+.links a:focus-visible { outline: 2px solid var(--hot); outline-offset: 4px; color: var(--hot); }
+
+#gauge { position: fixed; top: 0; right: .5rem; width: 110px; height: 100%; pointer-events: none;
+  -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent); mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .project .tags, .project .view { opacity: 1; }
+  .fields span { opacity: 1; transform: none; transition: none; }
+  .caret { animation: none; }
+}
+
+/* roots at the end of the trunk */
+/* the quotes: hang off the trunk and stay encrypted until the red liquid reaches their node */
+:root { --qx: 0rem; --qz: 0rem; }
+.hid { visibility: hidden; }
+.bq { --c: 13px; position: absolute; top: 40rem; left: 4.2rem; width: min(32rem, calc(100vw - 6rem)); margin: 0; font: 400 1.05rem/1.6 var(--mono); letter-spacing: .02em; color: var(--hot); opacity: 0; transition: opacity 1s; }
+.bq.seen { opacity: 1; }
+.bq p { margin: 0; transition: opacity 1s; }
+.bq p.enc { opacity: .7; }
+.bq cite { display: block; margin-top: .8rem; font-size: .8rem; font-style: normal; letter-spacing: .08em; opacity: 0; transition: opacity 1.2s; }
+.bq cite::before { content: "\2014\00a0"; }
+.bq.open cite { opacity: .9; }
+.bq .limb { position: absolute; left: -3.1rem; top: calc(var(--c) - 24px); width: 54px; height: 40px; overflow: visible; pointer-events: none; }
+.bq .limb .br { fill: none; stroke: rgba(var(--bit-rgb), .35); stroke-width: 1; }
+.bq .limb .liq { fill: none; stroke: var(--hot); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset .45s ease-out .25s; }
+.bq.hit .limb .liq { stroke-dashoffset: 0; transition-delay: 0s; }
+.bq .node { position: absolute; left: calc(-3.1rem + 32.5px); top: calc(var(--c) - 5.5px); width: 11px; height: 11px; pointer-events: none; }
+.bq .node i { position: absolute; inset: 1px; border-radius: 2px; transform: rotate(45deg); background: var(--bg); border: 1.2px solid rgba(var(--bit-rgb), .7); transition: background .3s, border-color .3s, box-shadow .4s; }
+.bq .node::after { content: ""; position: absolute; inset: -7px; border: 1px solid var(--hot); border-radius: 50%; opacity: 0; }
+.bq.hit .node i { background: var(--hot); border-color: var(--hot); box-shadow: 0 0 10px 2px rgba(var(--hot-rgb), .5); transition-delay: .4s; animation: nodepop .85s ease-out .4s; }
+.bq.hit .node::after { animation: ping .9s ease-out .4s; }
+@media (max-width: 60rem) { .bq { right: 1.1rem; width: auto; } }
+
+.stage { position: absolute; left: 0; overflow: visible; pointer-events: none; }
+.stage .contact { pointer-events: auto; }
+.roots { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.roots path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.roots .rt { stroke: rgba(var(--bit-rgb), .35); }
+.roots .rl { stroke: var(--hot); }
+
+/* packet that rides the project trunk */
+.pkt { position: absolute; left: -5px; top: -5px; width: 11px; height: 11px; pointer-events: none; will-change: transform; }
+.pkt i { position: absolute; inset: 1px; background: var(--hot); border-radius: 2px; transform: rotate(45deg); box-shadow: 0 0 10px 2px rgba(var(--hot-rgb), .5); }
+.pkt::after { content: ""; position: absolute; inset: -7px; border: 1px solid var(--hot); border-radius: 50%; opacity: 0; }
+.pkt.ping::after { animation: ping .9s ease-out; }
+@keyframes ping { 0% { transform: scale(.35); opacity: .9; } 100% { transform: scale(2.4); opacity: 0; } }
+/* project nodes: the same glowing diamond as the packet, dormant until the liquid arrives, then it pops */
+.project .node { position: absolute; left: calc(-3.1rem + 32.5px); top: 1.5px; width: 11px; height: 11px; pointer-events: none; }
+.project .node i { position: absolute; inset: 1px; border-radius: 2px; transform: rotate(45deg); background: var(--bg); border: 1.2px solid rgba(var(--bit-rgb), .7); transition: background .3s, border-color .3s, box-shadow .4s; }
+.project .node::after { content: ""; position: absolute; inset: -7px; border: 1px solid var(--hot); border-radius: 50%; opacity: 0; }
+.project.hit .node i { background: var(--hot); border-color: var(--hot); box-shadow: 0 0 10px 2px rgba(var(--hot-rgb), .5); transition-delay: .4s; animation: nodepop .85s ease-out .4s; }
+.project.hit .node::after { animation: ping .9s ease-out .4s; }
+@keyframes nodepop {
+  0% { transform: rotate(45deg) scale(.6); box-shadow: 0 0 0 0 rgba(var(--hot-rgb), 0); }
+  35% { transform: rotate(45deg) scale(1.6); box-shadow: 0 0 20px 7px rgba(var(--hot-rgb), .85); }
+  100% { transform: rotate(45deg) scale(1); box-shadow: 0 0 10px 2px rgba(var(--hot-rgb), .5); }
+}
+.cart { left: -5.5px; top: -5.5px; opacity: 0; }
+.project .hs { position: absolute; left: 0; top: -2.1rem; font: 400 .72rem/1 var(--mono); letter-spacing: .06em; color: var(--muted); white-space: pre; opacity: 0; transition: opacity .3s, color .4s; pointer-events: none; }
+.project .hs.on { opacity: 1; }
+.project .hs.ok { color: var(--hot); }
+/* the terminal at the very end of the page */
+.endterm { position: absolute; z-index: 5; left: 1.1rem; width: min(46rem, calc(100vw - 2.2rem)); height: 18rem; overflow-y: auto; scrollbar-width: none; text-align: left; font: 400 .95rem/1.9 var(--mono); cursor: text; }
+.endterm::-webkit-scrollbar { display: none; }
+.eline { display: flex; align-items: center; }
+.eline .caret { display: none; margin-right: .3ch; }
+.eline:not(:focus-within) .caret { display: inline-block; }
+.eline input { flex: 1; min-width: 0; font: inherit; color: var(--ink); background: none; border: 0; outline: 0; padding: 0; caret-color: var(--hot); }
+</style>
+</head>
+<body>
+<div class="hero" id="hero" aria-hidden="true"><canvas class="waves" id="waves"></canvas></div>
+<canvas id="gauge" aria-hidden="true"></canvas>
+
+<main>
+  <div class="fields"><span>Cybersecurity</span><span>Machine Learning</span><span>Psychology</span></div>
+  <header class="who" id="who"></header>
+  <div class="term" id="term"></div>
+</main>
+
+<div class="descent" aria-hidden="true"></div>
+<div class="tree" id="tree" aria-hidden="true"><b></b></div>
+
+<article class="at project" data-dn="60" data-dw="44">
+  <p class="path">projects/Cybersecurity-home-lab</p>
+  <h2>Cybersecurity Home Lab</h2>
+  <ul class="pts">
+    <li>Built a physical three-machine Linux lab on static IPv4: a Kali attacker, a Debian target and a macOS observer, all managed over SSH with ED25519 key authentication.</li>
+    <li>Ran active reconnaissance with Nmap to map the target, then assessed the services it exposed.</li>
+    <li>Hardened the Linux server with SSH configuration changes and the ufw firewall, then attacked it with a Hydra SSH brute force.</li>
+    <li>Detected the attack with SIEM tools like Wazuh, studied the traffic in Wireshark and tcpdump, and shut it down with Fail2Ban. Every phase is written up with findings and mitigations.</li>
+  </ul>
+  <p class="tags">Linux · Nmap · Hydra · Wireshark · Wazuh · Fail2Ban</p>
+  <a class="view" href="https://github.com/densecaviar/Cybersecurity-home-lab" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+</article>
+<article class="at project" data-dn="240" data-dw="184">
+  <p class="path">projects/Azure-Kerberos-AD-lab</p>
+  <h2>Azure Kerberos &amp; AD Lab</h2>
+  <ul class="pts">
+    <li>Built a segmented Azure network from scratch: a resource group, role-based subnets and a network security group on each one denying all inbound internet traffic.</li>
+    <li>Promoted a Windows Server 2022 machine to a domain controller (AD DS, DNS and the Kerberos KDC) for a new forest, then joined a Windows 11 client to the domain.</li>
+    <li>Captured a real Kerberos exchange with klist, a TGT and a service ticket, and matched both to Windows Security events 4768 and 4769 on the domain controller.</li>
+    <li>Debugged real problems as they came up, a DNS misconfiguration, a stuck Run Command extension and RDP permission errors, and documented each fix.</li>
+  </ul>
+  <p class="tags">Azure · Active Directory · Kerberos</p>
+  <a class="view" href="https://github.com/densecaviar/azure-AD-and-kerberos-lab" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+</article>
+<!-- QUOTE 1 (after project 2): edit the sentence inside <p> and the name inside <cite> -->
+<blockquote class="bq seen" id="bq" data-dn="410" data-dw="320"><p>The first principle is that you must not fool yourself, and you are the easiest person to fool.</p><cite>Richard Feynman</cite></blockquote>
+<article class="at project" data-dn="470" data-dw="380">
+  <p class="path">projects/Rendezvous</p>
+  <h2>Rendezvous</h2>
+  <ul class="pts">
+    <li>Built with a team a web app where students create, browse and join campus events, with search, invitations, sharing and reminders.</li>
+    <li>Full stack: a React frontend, a FastAPI (Python) backend and a MySQL database accessed through SQLAlchemy.</li>
+    <li>Added account registration and login with signed JWT tokens, and limited the app to university members as a safety measure.</li>
+    <li>Packaged the frontend, backend and database as three Docker Compose services, and ran the project in sprints with the team meeting three times a week.</li>
+  </ul>
+  <p class="tags">React · FastAPI · MySQL · Docker</p>
+  <a class="view" href="https://github.com/densecaviar/Rendezvous" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+</article>
+<article class="at project" data-dn="650" data-dw="520">
+  <p class="path">projects/malware-detector-ml</p>
+  <h2>Malware Detection with Machine Learning</h2>
+  <ul class="pts">
+    <li>Built a machine learning classifier using Gradient Boosted Decision Trees to distinguish between benign and malicious Windows PE files.</li>
+    <li>Extracted and prepared 32 unique numerical features from Windows PE files, including entropy, file size, imported functions, and file metadata</li>
+    <li>Implemented it with LightGBM binary classification model to distinguish between benign and malicious files.</li>
+    <li>Evaluated performance using accuracy, precision, recall, F1 score, ROC AUC, and confusion matrices, achieving 94.11% test accuracy and 98.59% ROC AUC.</li>
+    <li>Analyzed feature importance using LightGBM's gain and split-count metrics to investigate which file characteristics contributed most to the model's predictions.</li>
+  </ul>
+  <p class="tags">Python · Machine Learning · Malware detection · Gradient Boosted Decision trees</p>
+</article>
+
+<!-- This command appears after all project write-ups and introduces the work-experience section. -->
+<section class="at project workterm" id="work-experience-terminal" data-dn="700" data-dw="545" aria-label="Work experience directory listing">
+  <div class="line hid" id="work-experience-command"><span class="pu">observer@portfolio:~</span><span class="ps">$</span><span class="cmd"></span><i class="caret idle"></i></div>
+  <div class="line out ls hid" id="work-experience-output">
+    <span>Walmart-Electronics-Associate</span>
+    <span>ArriveUTSC-Program-Facilitator</span>
+    <span>SIINAI-Director-of-Events</span>
+  </div>
+</section>
+
+<!-- EXPERIENCE: each role is displayed as a branch on the same project tree. -->
+<article class="at project exp" data-dn="720" data-dw="560">
+  <p class="path">work-experience/Walmart</p>
+  <h2>Electronics Associate / Technical Support Specialist</h2>
+  <p class="when">Walmart · Contract Part-time · Oct 2025 – Mar 2026 · Toronto, Ontario, Canada</p>
+  <ul class="pts">
+    <li>Served as the primary point of contact for technical inquiries, resolving hardware and software configuration issues for an average of 80+ daily users in an L1 helpdesk environment.</li>
+    <li>Maintained, monitored, and troubleshot local photo-printing kiosk terminals, minimizing system downtime.</li>
+    <li>Enforced physical security controls and strict access-management protocols for high-value technology infrastructure assets.</li>
+    <li>Translated hardware specifications—including RAM, CPU, and Wi-Fi protocols—into accessible explanations for non-technical users.</li>
+  </ul>
+</article>
+<article class="at project exp" data-dn="790" data-dw="610">
+  <p class="path">work-experience/ArriveUTSC</p>
+  <h2>ArriveUTSC Program Facilitator</h2>
+  <p class="when">Academic Advising &amp; Career Centre · Contract Part-time · Sep 2024 – Apr 2025 · Toronto, Ontario, Canada · Hybrid</p>
+  <ul class="pts">
+    <li>Reviewed lecture materials and independently prepared to explain course concepts clearly to students with different levels of prior knowledge.</li>
+    <li>Provided individualized guidance, answered questions, and communicated complex information in accessible language.</li>
+    <li>Created structured study plans and documentation tailored to individual student needs.</li>
+  </ul>
+</article>
+<article class="at project exp" data-dn="860" data-dw="660">
+  <p class="path">work-experience/SIINAI</p>
+  <h2>Director of Events</h2>
+  <p class="when">Society for Innovation at the Intersection of Natural and Artificial Intelligence · Contract Part-time · Aug 2024 – Apr 2025 · Toronto, Ontario, Canada · Hybrid</p>
+  <ul class="pts">
+    <li>Managed operational infrastructure and coordinated with stakeholders to deploy large-scale technical seminars for 100+ students.</li>
+    <li>Architected and delivered an introductory AI workshop, translating machine learning core logic and data dependencies for non-technical customers.</li>
+  </ul>
+</article>
+
+<!-- QUOTE 2 (after project 4): edit the sentence inside <p> and the name inside <cite> -->
+<blockquote class="bq seen" id="bq2" data-dn="780" data-dw="625"><p>If you’re going to try, go all the way. Otherwise don’t even start.</p><cite>Charles Bukowski</cite></blockquote>
+<section class="at contact" data-dn="870" data-dw="690">
+  <p class="say">Say hello.</p>
+  <nav class="links">
+    <a href="mailto:amodhdurve@gmail.com">Email</a>
+    <a href="https://github.com/densecaviar" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/amodh-durve" target="_blank" rel="noopener">LinkedIn</a>
+  </nav>
+</section>
+
+<section class="endterm" id="endterm" aria-label="terminal"><div id="eo"></div><label class="line eline"><span class="pu">observer@portfolio:~</span><span class="ps">$</span><i class="caret"></i><input id="ein" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="terminal input"></label></section>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const PX_PER_M = 6, SURFACE = .66;
+  const rs = getComputedStyle(document.documentElement);
+  const T = { bit: rs.getPropertyValue('--bit-rgb').trim(), hot: rs.getPropertyValue('--hot-rgb').trim() };
+  T.bitC = `rgb(${T.bit})`; T.hotC = `rgb(${T.hot})`;
+  const ready = document.fonts ? document.fonts.ready : Promise.resolve();
+
+  /* ---------- scramble / decrypt text ---------- */
+  const GL = '01#<>/\\|[]{}$%&*+=?ABCDEF';
+  function scramble(el, txt, ms) {
+    if (RM) { el.textContent = txt; return; }
+    const t0 = performance.now();
+    (function f(now) {
+      const p = Math.min(1, (now - t0) / ms);
+      let out = '';
+      for (let i = 0; i < txt.length; i++) out += (txt[i] === ' ' || i / txt.length < p) ? txt[i] : GL[Math.random() * GL.length | 0];
+      el.textContent = out;
+      if (p < 1) requestAnimationFrame(f);
+    })(t0);
+  }
+
+  /* ---------- easter eggs ---------- */
+  let ki = 0, breatheStart = 0, breatheUntil = 0, toastT = 0;
+  const KON = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  const toastEl = document.createElement('div'); toastEl.className = 'toast'; toastEl.setAttribute('role', 'status'); document.body.append(toastEl);
+  function toast(t) { toastEl.textContent = t; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 3200); }
+  function toggleDark(t) { const on = document.documentElement.toggleAttribute('data-dark'); toast(t + (on ? '' : '  (reverted)')); }
+  function breathe() { if (RM) return; breatheStart = performance.now(); breatheUntil = breatheStart + 5000; }
+  addEventListener('keydown', e => {
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    ki = k === KON[ki] ? ki + 1 : (k === KON[0] ? 1 : 0);
+    const done = ki === KON.length;
+    if (ki >= 9) e.preventDefault();
+    if (done) { ki = 0; toggleDark('\u2191\u2191\u2193\u2193\u2190\u2192\u2190\u2192BA  +30 lives. dark mode unlocked.'); }
+  });
+  function egg(v) {
+    if (/^sudo\b/.test(v)) return 'visitor is not in the sudoers file. This incident will be reported.';
+    if (/^rm\b/.test(v)) return 'permission denied. nice try.';
+    if (v === 'cat /etc/passwd') return 'root:x:0:0:nice try:/root:/bin/bash';
+    if (v === 'breathe' || v === 'o2' || v === 'oxygen') { breathe(); return 'inhale\u2026 exhale\u2026 O\u2082 levels nominal.'; }
+    if (v === 'matrix' || v === 'dark') { toggleDark('wake up, neo.'); return 'wake up, neo\u2026'; }
+    if (v === 'date') return new Date().toString();
+    const t = {
+      'help': 'ls \u00b7 pwd \u00b7 echo \u00b7 file \u00b7 unzip \u00b7 cat \u00b7 clear \u00b7 decrypt \u00b7 encrypt \u00b7 whoami \u00b7 sudo \u00b7 vim \u00b7 dns \u00b7 klist \u00b7 breathe \u00b7 matrix',
+      'whoami': 'amodh. probably. check the top left.',
+      'ls': 'quotes/  projects/  secrets/   (secrets: permission denied)',
+      'pwd': '/home/amodh/portfolio',
+      'vim': 'you are now in vim. there is no escape.',
+      'vi': 'you are now in vim. there is no escape.',
+      ':q': 'you escaped vim. legend.', ':q!': 'you escaped vim. legend.', ':wq': 'you escaped vim. legend.', ':x': 'you escaped vim. legend.',
+      'nano': 'nano: respect.',
+      'emacs': 'emacs: loading\u2026 4 GB later: ready.',
+      '42': 'the answer to life, the universe and everything.',
+      'dns': "it's always DNS.", 'dig': "it's always DNS.", 'nslookup': "it's always DNS.",
+      'ping': 'pong. 0% packet loss.',
+      'klist': 'krbtgt/ENTERPRISE.LOCAL  (event 4768, then 4769, exactly as expected)',
+      'hydra': 'brute force detected. fail2ban says hi.',
+      'fail2ban': 'you have been banned for 600s. (kidding)',
+      'nmap': 'port 443 open. everything else: filtered. be gentle.',
+      'wazuh': 'rule 5710: attempt to login using a non-existent user. (that was you)',
+      'hello': 'hello, world.', 'hi': 'hello, world.',
+      'exit': 'there is no exit. only scroll.', 'quit': 'there is no exit. only scroll.', 'logout': 'there is no exit. only scroll.',
+      'hack': 'access granted. just kidding. email me instead.',
+      'coffee': 'HTTP 418: I am a teapot.',
+      'neofetch': 'portfolio OS \u00b7 kernel: curiosity-1.0 \u00b7 shell: bash \u00b7 theme: red / gray / black'
+    };
+    return Object.prototype.hasOwnProperty.call(t, v) ? t[v] : null;
+  }
+  const TITLES = ['Segmentation fault (core dumped)', 'Connection lost. Retrying\u2026', 'kernel panic - not syncing', '404: tab not found'];
+  document.addEventListener('visibilitychange', () => { document.title = document.hidden ? TITLES[Math.random() * TITLES.length | 0] : 'Amodh Durve'; });
+  console.log('%c$ whoami', 'color:#e11d2a;font:600 14px monospace');
+  console.log('%cAmodh Durve \u2014 cybersecurity \u00b7 machine learning\nYou opened the console. Respect. Type  hire  for contact details.', 'font:12px monospace');
+  Object.defineProperty(window, 'hire', { get() { console.log('%camodhdurve@gmail.com', 'color:#e11d2a;font:600 13px monospace'); return 'say hello :)'; } });
+
+  /* ---------- the quotes: encrypted until the red liquid reaches their node, encrypted again once it has left ---------- */
+  const hexify = q => { q.vis.textContent = q.txt.replace(/\S/g, () => '0123456789abcdef'[Math.random() * 16 | 0]); };
+  const QS = [...document.querySelectorAll('.bq')].map(el => {
+    const p = el.querySelector('p'), q = { el, p, txt: p.textContent, vis: document.createElement('span'), y: 1e9, hit: false, run: 0 };
+    const sr = document.createElement('span');
+    q.vis.setAttribute('aria-hidden', 'true'); sr.className = 'sr'; sr.textContent = q.txt;
+    p.textContent = ''; p.append(q.vis, sr); p.classList.add('enc'); hexify(q);
+    const sv = document.createElementNS('http://www.w3.org/2000/svg', 'svg'), D = 'M.5 0 C.5 14 8 24 32 24';
+    sv.setAttribute('class', 'limb'); sv.setAttribute('viewBox', '0 0 54 40'); sv.setAttribute('aria-hidden', 'true');
+    sv.innerHTML = `<path class="br" d="${D}"/><path class="liq" pathLength="100" d="${D}"/>`;
+    const nd = document.createElement('span'); nd.className = 'node'; nd.setAttribute('aria-hidden', 'true'); nd.innerHTML = '<i></i>';
+    el.append(sv, nd);
+    return q;
+  });
+  const bq = QS[0].el, bq2 = QS[1].el;
+  function decipher(q, run) {
+    if (RM) { q.vis.textContent = q.txt; q.el.classList.add('open'); return; }
+    const t0 = performance.now();
+    (function f(now) {
+      if (q.run !== run) return;
+      const pr = Math.min(1, (now - t0) / 1400);
+      let out = '';
+      for (let i = 0; i < q.txt.length; i++) out += (q.txt[i] === ' ' || i / q.txt.length < pr) ? q.txt[i] : GL[Math.random() * GL.length | 0];
+      q.vis.textContent = out;
+      if (pr < 1) requestAnimationFrame(f); else q.el.classList.add('open');
+    })(t0);
+  }
+  function hitQuote(q) {
+    q.hit = true; const run = ++q.run; q.el.classList.add('hit');
+    setTimeout(() => { if (q.run !== run) return; q.p.classList.remove('enc'); decipher(q, run); }, RM ? 0 : 450);
+  }
+  function resetQuote(q) {
+    q.hit = false; q.run++;
+    q.el.classList.remove('hit', 'open'); q.p.classList.add('enc'); hexify(q);
+  }
+
+  /* ---------- hero terminal ---------- */
+  const term = $('term'), who = $('who'), sleep = ms => new Promise(r => setTimeout(r, RM ? 0 : ms));
+  const PROMPT = '<span class="pu">observer@portfolio:~</span><span class="ps">$</span>';
+  const LISTING = { dir: 'projects/', items: ['Cybersecurity-home-lab', 'Azure-Kerberos-AD-lab', 'Rendezvous', 'PE-malware-detector'] };
+  const EXPERIENCE_LISTING = { dir: 'work-experience/', items: ['Walmart-Electronics-Associate', 'ArriveUTSC-Program-Facilitator', 'SIINAI-Director-of-Events'] };
+  /* The opening terminal lists projects only. Work experience gets its own terminal later in the scroll. */
+  const pl = document.createElement('div'); pl.className = 'line hid'; pl.innerHTML = PROMPT + '<span class="cmd"></span><i class="caret idle"></i>'; term.append(pl);
+  const lsEl = document.createElement('div'); lsEl.className = 'line out ls hid'; LISTING.items.forEach(n => { const a = document.createElement('span'); a.textContent = n; lsEl.append(a); }); term.append(lsEl);
+  /* typing that feels human: uneven rhythm, hesitation, and now and then a typo that gets fixed */
+  const NEAR = { l: 'k', s: 'a', p: 'o', r: 'e', o: 'i', j: 'h', e: 'r', c: 'v', t: 'r' };
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  async function typeReal(line, c, cmd) {
+    const caret = document.createElement('i'); caret.className = 'caret'; line.append(caret);
+    const at = !RM && cmd.length > 7 ? 3 + (Math.random() * (cmd.length - 6) | 0) : -1;
+    for (let i = 0; i < cmd.length; i++) {
+      const ch = cmd[i], prev = cmd[i - 1];
+      let d = rnd(70, 150);
+      if (i === 0) d = rnd(350, 700);
+      else if (prev === ' ') d += rnd(80, 220);
+      else if (prev === '/') d += rnd(40, 120);
+      if (Math.random() < .09) d += rnd(200, 420);
+      await sleep(d);
+      if (i === at) {
+        c.textContent += NEAR[ch] || 'x'; await sleep(rnd(90, 160));
+        c.textContent += cmd[i + 1]; await sleep(rnd(280, 520));
+        c.textContent = c.textContent.slice(0, -1); await sleep(rnd(90, 140));
+        c.textContent = c.textContent.slice(0, -1); await sleep(rnd(150, 260));
+      }
+      c.textContent += ch;
+    }
+    await sleep(rnd(380, 620));
+    caret.remove();
+  }
+  async function run(host, cmd, out, after, real, line) {
+    const l = line || document.createElement('div');
+    if (!line) { l.className = 'line'; l.innerHTML = PROMPT + '<span class="cmd"></span>'; host.append(l); }
+    const c = l.querySelector('.cmd');
+    if (real) await typeReal(l, c, cmd);
+    else { for (const ch of cmd) { c.textContent += ch; await sleep(75); } await sleep(280); }
+    if (line) l.after(out); else host.append(out);
+    if (after) await after();
+    await sleep(550);
+  }
+  async function boot() {
+    const name = document.createElement('h1'); name.className = 'name'; name.setAttribute('aria-label', 'Amodh Durve');
+    await run(who, 'whoami', name, async () => {
+      const full = 'Amodh Durve';
+      if (RM) { name.textContent = full; return; }
+      const caret = document.createElement('i'); caret.className = 'caret'; name.append(caret);
+      for (const ch of full) { caret.before(ch); await sleep(95); }
+      await sleep(350); caret.remove();
+    });
+    document.querySelector('.fields').classList.add('on');
+    await sleep(700);
+    pl.classList.remove('hid');
+    pl.querySelector('.idle').remove();
+    await run(term, 'ls ' + LISTING.dir, lsEl, async () => lsEl.classList.remove('hid'), true, pl);
+  }
+  ready.then(() => setTimeout(boot, RM ? 0 : 500));
+
+  /* Type the work-experience command only when the visitor reaches the point after all projects. */
+  const workExpSection = $('work-experience-terminal');
+  const workExpCommand = $('work-experience-command');
+  const workExpOutput = $('work-experience-output');
+  let workExpListingStarted = false;
+  async function revealWorkExperienceListing() {
+    if (workExpListingStarted) return;
+    workExpListingStarted = true;
+    workExpCommand.classList.remove('hid');
+    workExpCommand.querySelector('.idle')?.remove();
+    await typeReal(workExpCommand, workExpCommand.querySelector('.cmd'), 'ls work-experience/');
+    workExpOutput.classList.remove('hid');
+  }
+  if ('IntersectionObserver' in window) {
+    const workExpObserver = new IntersectionObserver((entries, observer) => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        observer.disconnect();
+        revealWorkExperienceListing();
+      }
+    }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+    workExpObserver.observe(workExpSection);
+  } else {
+    // Older-browser fallback: the listing remains available instead of being hidden forever.
+    revealWorkExperienceListing();
+  }
+
+  const F = s => `${s}px "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace`;
+
+  /* ---------- hero image: drifts slower than the page, fades as you scroll ---------- */
+  const hero = $('hero');
+  function heroFx() {
+    if (RM) return;
+    const y = scrollY;
+    hero.style.transform = `translateY(${y * .35}px)`;
+    hero.style.opacity = Math.max(0, 1 - y / (innerHeight * .7));
+  }
+
+  /* ---------- project tree: trunk lights up as you descend ---------- */
+  const projs = [...document.querySelectorAll('.project')];
+  const tree = $('tree'), fill = tree.firstElementChild;
+  let treeTop = 0, treeH = 0, rootsTop = 0, rootsH = 0;
+  let nodeYs = [], pk = 0, pt = 0;
+  const ROOT_LEAD = 100, ROOT_SPACE = 330; /* roots start this far above "Say hello" and reach this far below it */
+  const pkt = document.createElement('div'); pkt.className = 'pkt'; pkt.innerHTML = '<i></i>'; tree.append(pkt);
+  /* a project is alive while the red liquid is below its node; when the liquid drains back above it, the details clear (the name stays) */
+  function syncProjects() {
+    QS.forEach(q => { if (!q.hit && !q.lock && pk >= q.y) hitQuote(q); else if (q.hit && pk < q.y - 8) resetQuote(q); });
+    projs.forEach((p, i) => {
+      const ny = nodeYs[i]; if (ny === undefined) return;
+      const on = p.classList.contains('hit');
+      if (!on && pk >= ny) typeOut(p);
+      else if (on && pk < ny - 8) clearProject(p);
+    });
+  }
+  function applyPkt() {
+    const y = Math.min(pk, treeH);
+    fill.style.height = y + 'px'; pkt.style.transform = `translateY(${y}px)`; pkt.style.opacity = pk >= treeH - .5 ? 0 : 1;
+    rootsFx();
+  }
+
+  /* ---------- roller coaster: past the last project the liquid keeps flowing, bends under "Say hello" and rides loops, hills and drops across the whole page ---------- */
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  /* the stage holds "Say hello" and the track; once the liquid reaches the coaster it is pinned in place so a longer stretch of scrolling drives the ride */
+  const stage = document.createElement('div'); stage.className = 'stage';
+  const roots = document.createElementNS(SVGNS, 'svg');
+  roots.setAttribute('class', 'roots'); roots.setAttribute('aria-hidden', 'true'); stage.append(roots);
+  const cart = document.createElement('div'); cart.className = 'pkt cart'; cart.innerHTML = '<i></i>'; cart.setAttribute('aria-hidden', 'true'); stage.append(cart);
+  document.body.append(stage);
+  let track = null, rootLv = 0, rootLm = 1, rootO = 0, rootBottom = 0, trackD = -1, cartEnd = false, pinned = null, pinAt = 0, pinLen = 1;
+  const COASTER_SPEED = 3; /* pixels of track the liquid covers per pixel of scrolling; lower = slower */
+  /* one cycle each: [a = forward speed, b = loop size, ground height at the end of the cycle]. b well above a makes a loop, b below a makes a hill */
+  const CY = [[14, 46, -10], [30, 12, -60], [12, 50, 20], [24, 16, 70], [14, 44, -30], [10, 34, 0], [26, 10, -50], [13, 52, 40], [22, 18, 70], [11, 40, -30], [26, 12, 10], [14, 46, -6], [10, 38, 40], [24, 14, 0]];
+  const CYL = Array.from({ length: 42 }, (_, i) => CY[i % CY.length]);
+  const smooth = x => x * x * (3 - 2 * x), lerp = (p, q, f) => p + (q - p) * f;
+  function buildRoots(W, cw, cH) {
+    const tx = parseFloat(getComputedStyle(tree).left) + .5, sc = Math.max(.6, Math.min(1, W / 1300));
+    const o = Math.ceil(innerHeight * .6) + 40; /* the trunk line continues this far above the coaster so the pinned stage never shows a break */
+    const cB = ROOT_LEAD + cH, H = cB + ROOT_SPACE, Yg = cB + 30 + 165 * sc, Lv = Yg - 90, xs = tx + 90;
+    rootsH = H; rootO = o;
+    stage.style.width = W + 'px'; stage.style.height = (o + H) + 'px';
+    roots.setAttribute('width', W); roots.setAttribute('height', o + H); roots.setAttribute('viewBox', `0 0 ${W} ${o + H}`);
+    roots.replaceChildren(); track = null; trackD = -1;
+    /* integrate the track: x' = a - b cos t, y = ground - b (1 + cos t) is a chain of loops, blended between cycles near the ground */
+    const par = t => {
+      const u = (t - Math.PI) / (2 * Math.PI), k = Math.min(CYL.length - 1, Math.max(0, Math.floor(u))), f = u - k, w = .42;
+      let a = CYL[k][0], b = CYL[k][1];
+      if (f < w && k > 0) { const m = smooth((f + w) / (2 * w)); a = lerp(CYL[k - 1][0], a, m); b = lerp(CYL[k - 1][1], b, m); }
+      else if (f > 1 - w && k < CYL.length - 1) { const m = smooth((f - 1 + w) / (2 * w)); a = lerp(a, CYL[k + 1][0], m); b = lerp(b, CYL[k + 1][1], m); }
+      return [a * sc, b * sc, lerp(k ? CYL[k - 1][2] : 0, CYL[k][2], smooth(f)) * sc];
+    };
+    const STEPS = 128, dt = 2 * Math.PI / STEPS, pts = [[xs, Yg]], bnd = [];
+    let x = xs;
+    for (let n = 1; n <= CYL.length * STEPS; n++) {
+      const t = Math.PI + n * dt, [a, b] = par(t - dt / 2), [, bb, g] = par(t);
+      x += (a - b * Math.cos(t - dt / 2)) * dt;
+      pts.push([x, Yg + g - bb * (1 + Math.cos(t))]);
+      if (n % STEPS === 0) { bnd.push(n); if (x > W + 80) break; }
+    }
+    /* run as many full cycles as fit, then a straight run out to the right edge of the page */
+    let ci = bnd.length - 1;
+    const maxX = n => { let m = 0; for (let i = 0; i <= n; i++) m = Math.max(m, pts[i][0]); return m; };
+    while (ci > 0 && (pts[bnd[ci]][0] > W - 70 || maxX(bnd[ci]) > W - 30)) ci--;
+    const use = pts.slice(0, bnd[ci] + 1), last = use[use.length - 1];
+    use.push([W, last[1]]);
+    rootBottom = Math.max(...use.map(p => p[1])) + o;
+    const rest = `V${o + Lv} C${tx} ${o + Yg - 30} ${tx + 24} ${o + Yg - 2} ${xs} ${o + Yg}` + use.slice(1).map(p => `L${p[0].toFixed(1)} ${(p[1] + o).toFixed(1)}`).join('');
+    const tr = document.createElementNS(SVGNS, 'path'), lq = document.createElementNS(SVGNS, 'path');
+    tr.setAttribute('class', 'rt'); lq.setAttribute('class', 'rl');
+    tr.setAttribute('d', `M${tx} ${o} ${rest}`); lq.setAttribute('d', `M${tx} 0 ${rest}`);
+    tr.setAttribute('stroke-width', 1); lq.setAttribute('stroke-width', 2);
+    roots.append(tr, lq);
+    const len = lq.getTotalLength();
+    lq.style.strokeDasharray = `${len}`; lq.style.strokeDashoffset = `${len}`; lq.style.opacity = 0;
+    track = { lq }; rootLv = Lv; rootLm = len;
+  }
+  function pinFx(force) {
+    const st = scrollY < pinAt ? 0 : scrollY <= pinAt + pinLen ? 1 : 2; /* before the ride, pinned during it, scrolling away after it */
+    if (!force && st === pinned) return;
+    pinned = st;
+    stage.style.position = st === 1 ? 'fixed' : 'absolute';
+    stage.style.top = (st === 0 ? rootsTop - rootO : st === 1 ? rootsTop - rootO - pinAt : rootsTop - rootO + pinLen) + 'px';
+  }
+  function rootsFx() {
+    if (!track) return;
+    const dist = Math.max(0, Math.min(rootLm, rootO + pk - treeH));
+    if (dist === trackD) return;
+    trackD = dist;
+    const lq = track.lq;
+    lq.style.strokeDashoffset = `${rootLm - dist}`; lq.style.opacity = dist > 0 ? 1 : 0;
+    if (dist <= rootO) { cart.style.opacity = 0; return; }
+    const P = lq.getPointAtLength(dist), A = lq.getPointAtLength(Math.max(0, dist - 3)), B = lq.getPointAtLength(Math.min(rootLm, dist + 3));
+    cart.style.opacity = 1;
+    cart.style.transform = `translate(${P.x}px, ${P.y}px)`;
+    cart.firstChild.style.transform = `rotate(${Math.atan2(B.y - A.y, B.x - A.x) * 180 / Math.PI + 45}deg)`;
+    const end = dist >= rootLm - .5;
+    if (end !== cartEnd) { cartEnd = end; if (end) { cart.classList.remove('ping'); void cart.offsetWidth; cart.classList.add('ping'); } }
+  }
+  /* the liquid sits at mid-screen down the trunk; once the coaster starts the page pins and each scrolled pixel moves it COASTER_SPEED pixels along the track */
+  function treeFx() {
+    const a = scrollY + innerHeight * .5 - treeTop;
+    pt = scrollY <= pinAt ? a : treeH + rootLv + (scrollY - pinAt) * COASTER_SPEED;
+    pt = Math.max(0, Math.min(treeH + rootLm - rootO, pt));
+    if (RM) { pk = pt; applyPkt(); syncProjects(); }
+  }
+  function pktLoop() {
+    const prev = pk;
+    /* Follow scroll changes aggressively, but retain a tiny amount of easing to avoid visual jitter.
+       Small movements get a quick 42% correction per frame; fast scrolls ramp up to 88%. */
+    const delta = pt - pk;
+    const follow = Math.min(.88, .42 + Math.abs(delta) * .003);
+    pk += delta * follow;
+    if (Math.abs(pt - pk) < .35) pk = pt;
+    applyPkt(); syncProjects();
+    for (const ny of [...nodeYs, ...QS.map(q => q.y)]) if ((prev < ny && pk >= ny) || (prev > ny && pk <= ny)) { pkt.classList.remove('ping'); void pkt.offsetWidth; pkt.classList.add('ping'); }
+    requestAnimationFrame(pktLoop);
+  }
+  if (!RM) requestAnimationFrame(pktLoop);
+
+  /* ---------- project points type out when you approach, and clear when you move away ---------- */
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  projs.forEach(p => {
+    p._run = 0;
+    p._lis = [...p.querySelectorAll('.pts li')];
+    p._lis.forEach(li => {
+      const txt = li.textContent.trim();
+      li.textContent = '';
+      const sr = document.createElement('span'), gh = document.createElement('span'), ty = document.createElement('span');
+      sr.className = 'sr'; sr.textContent = txt;
+      gh.className = 'ghost'; gh.setAttribute('aria-hidden', 'true'); gh.textContent = txt;
+      ty.className = 'typed'; ty.setAttribute('aria-hidden', 'true');
+      li.append(sr, gh, ty);
+      li._txt = txt; li._ty = ty;
+    });
+  });
+  projs.forEach(p => {
+    const NS = 'http://www.w3.org/2000/svg', sv = document.createElementNS(NS, 'svg');
+    sv.setAttribute('class', 'limb'); sv.setAttribute('viewBox', '0 0 54 60'); sv.setAttribute('aria-hidden', 'true');
+    const D = 'M.5 0 C.5 28 10 44 32 44';
+    sv.innerHTML = `<path class="br" d="${D}"/><path class="liq" pathLength="100" d="${D}"/>`;
+    p.append(sv);
+    const nd = document.createElement('span'); nd.className = 'node'; nd.setAttribute('aria-hidden', 'true'); nd.innerHTML = '<i></i>'; p.append(nd);
+    p._hs = document.createElement('span'); p._hs.className = 'hs'; p._hs.setAttribute('aria-hidden', 'true'); p.append(p._hs);
+  });
+  async function handshake(p) {
+    const run = p._run, el = p._hs;
+    el.classList.remove('ok'); el.classList.add('on');
+    for (const t of ['SYN', 'SYN  \u203a  SYN-ACK', 'SYN  \u203a  SYN-ACK  \u203a  ACK']) {
+      if (p._run !== run) return;
+      el.textContent = t; await wait(RM ? 0 : 140);
+    }
+    if (p._run !== run) return;
+    el.textContent = 'connection established'; el.classList.add('ok');
+  }
+  function clearProject(p) {
+    p._hs.classList.remove('on', 'ok'); p._hs.textContent = '';
+    p._run++;
+    p.classList.remove('hit', 'done');
+    p._lis.forEach(li => { li.classList.remove('show'); li._ty.textContent = ''; });
+  }
+  async function typeOut(p) {
+    const run = ++p._run;
+    p.classList.add('hit');
+    handshake(p);
+    if (RM) { p._lis.forEach(li => { li.classList.add('show'); li._ty.textContent = li._txt; }); p.classList.add('done'); return; }
+    for (const li of p._lis) {
+      li.classList.add('show');
+      const node = document.createTextNode(''), caret = document.createElement('i'); caret.className = 'caret';
+      li._ty.append(node, caret);
+      const t0 = performance.now(), len = li._txt.length;
+      await new Promise(res => (function f(now) {
+        if (p._run !== run) return res();
+        const n = Math.min(len, Math.floor((now - t0) * .36));
+        node.nodeValue = li._txt.slice(0, n);
+        n < len ? requestAnimationFrame(f) : res();
+      })(t0));
+      if (p._run !== run) return;
+      caret.remove();
+      await wait(40);
+    }
+    if (p._run === run) p.classList.add('done');
+  }
+
+
+  /* ---------- the terminal at the end: simulated shell + virtual filesystem ---------- */
+  const endterm = $('endterm'), eo = $('eo'), ein = $('ein'), hist = []; let hi = 0;
+  const VFS = {
+    cwd: '/home/amodh/portfolio',
+    extracted: false,
+    files: {
+      'flag': {
+        type: 'Zip archive data, at least v2.0 to extract',
+        member: 'secret',
+        content: 'God is in the details.'
+      },
+      'projects/': { type: 'directory' },
+      'work-experience/': { type: 'directory' },
+      'quotes/': { type: 'directory' }
+    }
+  };
+
+  function shellArgs(s) {
+    // Small shell-like tokenizer: supports single/double quoted arguments.
+    const args = [];
+    const re = /"([^"]*)"|'([^']*)'|(\S+)/g;
+    let m;
+    while ((m = re.exec(s)) !== null) args.push(m[1] ?? m[2] ?? m[3]);
+    return args;
+  }
+
+  const EXPERIENCE_FILES = {
+    'Walmart-Electronics-Associate': [
+      'Electronics Associate / Technical Support Specialist',
+      'Walmart | Contract Part-time | Oct 2025 – Mar 2026 | Toronto, Ontario, Canada',
+      'Served as the primary point of contact for technical inquiries, resolving hardware and software configuration issues for an average of 80+ daily users in an L1 helpdesk environment.',
+      'Maintained, monitored, and troubleshot local photo-printing kiosk terminals, minimizing system downtime.',
+      'Enforced physical security controls and strict access-management protocols for high-value technology infrastructure assets.',
+      'Translated hardware specifications (RAM, CPU, and Wi-Fi protocols) into accessible explanations for non-technical users.'
+    ].join('\n'),
+    'ArriveUTSC-Program-Facilitator': [
+      'ArriveUTSC Program Facilitator',
+      'Academic Advising & Career Centre | Contract Part-time | Sep 2024 – Apr 2025 | Toronto, Ontario, Canada | Hybrid',
+      'Reviewed lecture materials and independently prepared to explain course concepts clearly to students with different levels of prior knowledge.',
+      'Provided individualized guidance, answered questions, and communicated complex information in accessible language.',
+      'Created structured study plans and documentation tailored to individual student needs.'
+    ].join('\n'),
+    'SIINAI-Director-of-Events': [
+      'Director of Events',
+      'Society for Innovation at the Intersection of Natural and Artificial Intelligence | Contract Part-time | Aug 2024 – Apr 2025 | Toronto, Ontario, Canada | Hybrid',
+      'Managed operational infrastructure and coordinated with stakeholders to deploy large-scale technical seminars for 100+ students.',
+      'Architected and delivered an introductory AI workshop, translating machine learning core logic and data dependencies for non-technical customers.'
+    ].join('\n')
+  };
+
+  function virtualLs() {
+    const names = ['flag', 'projects/', 'work-experience/', 'quotes/'];
+    if (VFS.extracted) names.push('secret');
+    return names.join('  ');
+  }
+
+  function virtualCommand(command, argumentText) {
+    const args = shellArgs(argumentText);
+    const target = args[0];
+
+    if (command === 'echo') {
+      // Preserve entered spacing; remove only a matching pair of outer quotes.
+      let message = argumentText;
+      if ((message.startsWith('"') && message.endsWith('"')) ||
+          (message.startsWith("'") && message.endsWith("'"))) {
+        message = message.slice(1, -1);
+      }
+      return message;
+    }
+
+    if (command === 'ls') {
+      if (!target || target === '.') return virtualLs();
+      if (['projects', 'projects/'].includes(target)) return LISTING.items.join('  ');
+      if (['work-experience', 'work-experience/'].includes(target)) return EXPERIENCE_LISTING.items.join('  ');
+      return 'Permission denied';
+    }
+    
+    if (command === 'vim')
+    {
+      while (command !== ':wq' || command !== ':q')
+        return "You are in vim. There is no escape."
+    }
+
+    if (command === 'pwd') return VFS.cwd;
+
+    if (command === 'file') {
+      if (!target) return 'file: missing operand';
+      if (target === 'flag') return 'flag.zip: ' + VFS.files['flag'].type;
+      if (target === 'secret' && VFS.extracted) return 'secrets: ASCII text';
+      if (['projects', 'projects/', 'work-experience', 'work-experience/', 'quotes', 'quotes/'].includes(target))
+        return target.replace(/\/$/, '') + ': directory';
+      return "file: cannot open `" + target + "' (No such file or directory)";
+    }
+
+    if (command === 'unzip') {
+      if (!target) return 'unzip: missing archive operand';
+      if ((target !== 'flag') && (target !== 'flag.zip'))
+        return 'unzip: cannot find or open ' + target + ', ' + target + '.zip or ' + target + '.ZIP.';
+      if (VFS.extracted) return 'Archive:  flag\n  skipping: secret                 (already exists)';
+      VFS.extracted = true;
+      return 'Archive:  flag\n  extracting: secret';
+    }
+
+    if (command === 'cat') {
+      if (!target) return 'cat: missing file operand';
+      if (target === 'secret')
+        return VFS.extracted ? VFS.files['flag'].content : 'cat: secret: No such file or directory';
+      if (target === 'flag') return 'cat: flag.zip: binary file (or unsupported archive format)';
+      if (target.startsWith('work-experience/')) {
+        const name = target.slice('work-experience/'.length).replace(/\.txt$/, '');
+        return EXPERIENCE_FILES[name] || 'cat: ' + target + ': No such file or directory';
+      }
+      if (EXPERIENCE_FILES[target]) return EXPERIENCE_FILES[target];
+    }
+
+    return null;
+  }
+
+  function termRun(raw) {
+    const v = raw.trim();
+    if (!v) return;
+    if (v.toLowerCase() === 'clear') { eo.textContent = ''; return; }
+    const echo = document.createElement('div'); echo.className = 'line';
+    echo.innerHTML = PROMPT + '<span class="cmd"></span>'; echo.querySelector('.cmd').textContent = v; eo.append(echo);
+
+    const match = v.match(/^(\S+)(?:\s+([\s\S]*))?$/);
+    const command = match ? match[1].toLowerCase() : '';
+    const argumentText = match?.[2] ?? '';
+    const lv = v.toLowerCase();
+    let out;
+
+    if (lv === 'decrypt') { QS.forEach(q => { q.lock = false; }); out = 'decrypting 2 ciphertext blocks\u2026 ok.'; }
+    else if (lv === 'encrypt') { QS.forEach(q => { q.lock = true; if (q.hit) resetQuote(q); }); out = 'encrypting 2 plaintext blocks\u2026 ok.'; }
+    else {
+      out = virtualCommand(command, argumentText);
+      if (out === null) out = egg(lv);
+    }
+
+    if (out === null) out = 'bash: ' + command + ': command not found';
+    const o = document.createElement('div'); o.className = 'line out'; o.textContent = out; eo.append(o);
+  }
+  ein.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const v = ein.value; ein.value = '';
+      if (v.trim()) { hist.push(v); } hi = hist.length;
+      termRun(v); endterm.scrollTop = endterm.scrollHeight;
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      hi = Math.max(0, Math.min(hist.length, hi + (e.key === 'ArrowUp' ? -1 : 1)));
+      ein.value = hist[hi] || '';
+    } else if (e.key === 'l' && e.ctrlKey) { e.preventDefault(); eo.textContent = ''; }
+  });
+  endterm.addEventListener('click', () => { if (!getSelection().toString()) ein.focus({ preventScroll: true }); });
+  if (matchMedia('(pointer: fine)').matches) new IntersectionObserver((es, ob) => { if (es.some(e => e.isIntersecting)) { ein.focus({ preventScroll: true }); ob.disconnect(); } }, { threshold: .6 }).observe(endterm);
+
+  /* ---------- gauge: a ruler of memory addresses ---------- */
+  const gauge = $('gauge'), g = gauge.getContext('2d');
+  const hexOf = d => '0x' + (d * 8).toString(16).toUpperCase().padStart(4, '0');
+  let GW, GH;
+  function drawGauge() {
+    const sy = scrollY, mid = GH / 2, x = GW - 6, surfaceY = GH * SURFACE - sy;
+    const dTop = -surfaceY / PX_PER_M, dBot = (GH - surfaceY) / PX_PER_M;
+    g.clearRect(0, 0, GW, GH);
+    g.lineWidth = 1; g.strokeStyle = `rgba(${T.bit},.6)`; g.fillStyle = `rgba(${T.bit},.9)`;
+    g.font = F(11); g.textAlign = 'right'; g.textBaseline = 'middle';
+    g.beginPath(); g.moveTo(x + .5, Math.max(0, surfaceY)); g.lineTo(x + .5, GH); g.stroke();
+    for (let d = Math.max(0, Math.ceil(dTop / 5) * 5); d <= dBot; d += 5) {
+      const y = Math.round(d * PX_PER_M + surfaceY) + .5, major = d % 25 === 0;
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x - (major ? 14 : 6), y); g.stroke();
+      if (major && Math.abs(y - mid) > 20) g.fillText(hexOf(d), x - 20, y);
+    }
+    const depth = Math.max(0, Math.round((mid - surfaceY) / PX_PER_M));
+    g.strokeStyle = T.hotC; g.fillStyle = T.hotC; g.font = F(13);
+    g.beginPath(); g.moveTo(x + 4, mid + .5); g.lineTo(x - 18, mid + .5); g.stroke();
+    g.fillText(sy > 0 && sy >= document.documentElement.scrollHeight - innerHeight - 30 ? '0x4849' : hexOf(depth), x - 24, mid);
+  }
+
+  const items = [...document.querySelectorAll('.at')], descent = document.querySelector('.descent'), contact = document.querySelector('.contact');
+  function place() {
+    const wide = innerWidth >= 1180;
+    /* Keep the quotes close to the projects so the page reads as one continuous journey. */
+    if (!items.includes(bq)) { items.splice(items.indexOf(projs[2]), 0, bq); items.splice(items.indexOf(contact), 0, bq2); }
+    /* Compact, consistent rhythm between projects, quotes and contact. */
+    const QG = Math.max(170, innerHeight * .22);
+    const gaps = new Map([[bq, QG], [projs[2], QG], [projs[3], 170], ...projs.slice(4).map((p, i) => [p, i ? 170 : QG]), [bq2, QG], [contact, QG + 35]]);
+    let prev = lsEl.getBoundingClientRect().bottom + scrollY; /* the project timeline starts after the opening project listing */
+    items.forEach(q => {
+      const want = innerHeight * SURFACE + Number(wide ? q.dataset.dw : q.dataset.dn) * PX_PER_M;
+      const top = gaps.has(q) ? prev + gaps.get(q) : Math.max(want, prev + 105);
+      q.style.top = top + 'px'; prev = top + q.offsetHeight;
+    });
+    const cT = parseFloat(contact.style.top), cH = contact.offsetHeight;
+    treeTop = parseFloat(projs[0].style.top) - 50; /* the red line starts just below the typing, above the first project */
+    rootsTop = cT - ROOT_LEAD;
+    treeH = rootsTop - treeTop;
+    tree.style.top = treeTop + 'px'; tree.style.height = treeH + 'px';
+    nodeYs = projs.map(p => parseFloat(p.style.top) + 6 - treeTop);
+    QS.forEach(q => { const c = (parseFloat(getComputedStyle(q.el).lineHeight) || 26) / 2; q.el.style.setProperty('--c', c + 'px'); q.y = parseFloat(q.el.style.top) + c - treeTop; });
+    buildRoots(document.documentElement.clientWidth, contact.offsetWidth, cH);
+    if (contact.parentNode !== stage) stage.append(contact);
+    contact.style.top = (cT - (rootsTop - rootO)) + 'px';
+    /* the page pins when the liquid reaches the start of the coaster, and stays pinned for as long as the ride takes */
+    pinAt = rootsTop + rootLv - innerHeight * .5;
+    pinLen = (rootLm - rootO - rootLv) / COASTER_SPEED;
+    /* nothing under the finished track: the page ends just below its lowest point */
+    const need = Math.max(rootsTop - rootO + pinLen + rootBottom + 48, pinAt + pinLen + innerHeight + 60);
+    const etTop = need + 530; /* the terminal waits below the finished track */
+    endterm.style.top = etTop + 'px';
+    descent.style.height = Math.max(0, etTop + endterm.offsetHeight + innerHeight * .25 - descent.offsetTop) + 'px';
+    pinFx(true);
+  }
+  function resize() {
+    const d = devicePixelRatio || 1;
+    GW = gauge.clientWidth; GH = gauge.clientHeight;
+    gauge.width = GW * d; gauge.height = GH * d; g.setTransform(d, 0, 0, d, 0, 0);
+    place(); drawGauge(); heroFx(); treeFx();
+  }
+
+  /* ---------- input ---------- */
+  addEventListener('scroll', () => { drawGauge(); heroFx(); pinFx(); treeFx(); }, { passive: true });
+  addEventListener('resize', resize);
+  ready.then(() => { place(); drawGauge(); treeFx(); });
+
+  resize();
+})();
+</script>
+
+<script>
+/* hero stream: an endless conveyor of real-world-style message previews.
+   Each card shows its app, sender and a readable message excerpt. */
+(() => {
+  const hero = document.getElementById('hero'), cv = document.getElementById('waves');
+  if (!hero || !cv) return;
+  const ctx = cv.getContext('2d'), reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const SPEED = 145, LINE_Y = .22;
+  const MESSAGES = [
+    { icon: '💬', app: 'Slack', sender: 'Maya Chen', body: 'Could you review the deployment notes before stand-up?' },
+    { icon: '👥', app: 'Teams', sender: 'Jordan Lee', body: 'I moved our project sync to 2:30 PM. Does that work?' },
+    { icon: '📧', app: 'Gmail', sender: 'Priya Shah', body: 'I have attached the revised proposal for your feedback.' },
+    { icon: '📨', app: 'Outlook', sender: 'Finance team', body: 'Please submit your expense report by Friday afternoon.' },
+    { icon: '🐙', app: 'GitHub', sender: 'alex-chen · PR #482', body: 'Could you add a test for the expired-token case?' },
+    { icon: '🛠️', app: 'GitHub Actions', sender: 'CI pipeline', body: 'Build #482 passed. All 126 tests are green.' },
+    { icon: '📋', app: 'Jira', sender: 'WEB-214', body: 'This issue was assigned to you: fix the session timeout.' },
+    { icon: '📅', app: 'Calendar', sender: 'Design review', body: 'Your meeting starts in 15 minutes. Room 4B.' },
+    { icon: '📁', app: 'Google Drive', sender: 'Naomi Patel', body: 'Naomi shared “Q4 Planning” with you.' },
+    { icon: '📝', app: 'Notion', sender: 'Ravi Mehta', body: 'Ravi mentioned you: the incident timeline is ready.' },
+    { icon: '🔐', app: 'Okta', sender: 'Account security', body: 'A new sign-in was detected on your Mac.' },
+    { icon: '🛡️', app: 'Defender', sender: 'Device security', body: 'Quick scan complete. No threats were found.' },
+    { icon: '☁️', app: 'AWS CloudWatch', sender: 'web-prod-02', body: 'CPU usage stayed above 80% for five minutes.' },
+    { icon: '☁️', app: 'Azure', sender: 'Staging deployment', body: 'Version 2.8.1 was deployed successfully to staging.' },
+    { icon: '💬', app: 'Messages', sender: 'Arjun', body: 'Are we still on for coffee after work?' },
+    { icon: '📱', app: 'WhatsApp', sender: 'Family group', body: 'Dinner is at 8 tonight. See you there!' },
+    { icon: '📧', app: 'Gmail', sender: 'Hiring team', body: 'We would like to schedule a first-round interview.' },
+    { icon: '💼', app: 'LinkedIn', sender: 'Samira Khan', body: 'I saw your security projects and would love to connect.' },
+    { icon: '🎥', app: 'Zoom', sender: 'Meeting host', body: 'The recording from today’s session is ready.' },
+    { icon: '🧰', app: 'Sentry', sender: 'API service', body: 'A new issue was detected in /api/auth/session.' },
+    { icon: '🗃️', app: 'Dropbox', sender: 'Design team', body: 'The updated mockups are ready for review.' },
+    { icon: '🧾', app: 'PayPal', sender: 'Payment receipt', body: 'Your payment of ₹1,240 to Metro Market was successful.' },
+    { icon: '💳', app: 'Bank app', sender: 'Card alert', body: 'A card payment of ₹1,240 was approved.' },
+    { icon: '📦', app: 'Delivery app', sender: 'Courier update', body: 'Your package is out for delivery and should arrive today.' },
+    { icon: '🧭', app: 'Maps', sender: 'Commute update', body: 'There is a 12-minute delay on your usual route.' },
+    { icon: '🦊', app: 'GitLab', sender: 'Release pipeline', body: 'Release 2.4.0 passed all deployment checks.' },
+    { icon: '📲', app: 'iCloud', sender: 'Backup', body: 'Your iPhone backup completed successfully.' },
+    { icon: '📆', app: 'Calendar', sender: 'Maya Chen', body: 'Maya invited you to a project planning session.' },
+    { icon: '🖥️', app: 'ServiceNow', sender: 'IT Support', body: 'Your support request INC004821 has been updated.' },
+    { icon: '💬', app: 'Slack', sender: 'Daniel Kim', body: 'The staging environment is ready for another test.' },
+    { icon: '📨', app: 'Outlook', sender: 'Project office', body: 'The weekly status summary is ready for you to review.' },
+    { icon: '🔒', app: 'Cloudflare', sender: 'Security event', body: 'A blocked login attempt was detected and recorded.' }
+  ];
+
+  let W = 0, H = 0, y = 0, msgEnd = 0, bitsStart = 0, bitsEnd = 0;
+  let msgFont = '', msgBodyFont = '', bitFont = '', charW = 10, cardW = 180, cardGap = 100;
+  let cardH = 66, maxBodyLines = 3, bodyColor = '#1b1c1f';
+  let cards = [], bits = [], nBits = 0, messageIndex = 0, raf = 0, last = 0, resizeTimer = 0;
+  let bitsStarted = false, bitFillProgress = 0;
+  let muted = '#5c5f64', hot = '225,29,42', bitColor = '150,153,158';
+
+  function updateColors() {
+    const s = getComputedStyle(document.documentElement);
+    muted = s.getPropertyValue('--soft').trim() || muted;
+    bodyColor = s.getPropertyValue('--ink').trim() || bodyColor;
+    hot = s.getPropertyValue('--hot-rgb').trim() || hot;
+    bitColor = s.getPropertyValue('--bit-rgb').trim() || bitColor;
+  }
+
+  function dimensions() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    if (!W || !H) return false;
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    updateColors();
+
+    const small = W < 700;
+    msgFont = '500 ' + (small ? 9 : 10) + 'px "DM Sans", system-ui, sans-serif';
+    msgBodyFont = '400 ' + (small ? 10 : 12) + 'px "DM Sans", system-ui, sans-serif';
+    bitFont = '400 ' + (small ? 11 : 13) + 'px "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace';
+    charW = small ? 9 : 11;
+    cardH = small ? 68 : 64;
+    maxBodyLines = 3;
+
+    const imageH = hero.clientHeight;
+    const imageW = Math.min(W, imageH * 1102 / 831);
+    const imageL = (W - imageW) / 2;
+    /* The canvas runs underneath the image. The stream ends exactly where
+       the monitor begins, so each card disappears naturally behind it. */
+    msgEnd = imageL + imageW * .315;
+    bitsStart = imageL + imageW * .88;
+    bitsEnd = W;
+    y = H * .5 + imageH * (LINE_Y - .5);
+
+    /* A consistent card width makes the conveyor spacing predictable. */
+    cardW = Math.max(150, Math.min(340, msgEnd * .86));
+    /* When the leading card's midpoint reaches the monitor edge, the next
+       card's right edge reaches x=0. This gives a repeatable release interval. */
+    cardGap = Math.max(12, msgEnd - cardW / 2);
+    return true;
+  }
+
+  function fitMessage(item) {
+    const { icon, app, sender, body } = item;
+    const textX = 34;
+    const maxText = Math.max(46, cardW - textX - 12);
+    ctx.font = msgBodyFont;
+    const words = body.split(/\s+/);
+    const lines = [];
+    let line = '';
+    for (const word of words) {
+      const candidate = line ? line + ' ' + word : word;
+      if (line && ctx.measureText(candidate).width > maxText) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = candidate;
+      }
+    }
+    if (line) lines.push(line);
+    if (lines.length > maxBodyLines) {
+      lines.length = maxBodyLines;
+      let lastLine = lines[maxBodyLines - 1];
+      while (lastLine.length > 2 && ctx.measureText(lastLine + '…').width > maxText) {
+        lastLine = lastLine.slice(0, -1).trimEnd();
+      }
+      lines[maxBodyLines - 1] = lastLine + '…';
+    }
+    return { icon, meta: app + ' · ' + sender, lines, rawText: body, app, sender, w: cardW, x: 0 };
+  }
+
+  function createMessage() {
+    const item = MESSAGES[messageIndex];
+    messageIndex = (messageIndex + 1) % MESSAGES.length;
+    return fitMessage(item);
+  }
+
+  /* Add a new card behind the last one, preserving the exact same gap. */
+  function appendBehind() {
+    const tail = cards[cards.length - 1];
+    if (!tail) return;
+    const next = createMessage();
+    next.x = tail.x - next.w - cardGap;
+    cards.push(next);
+  }
+
+  function makeBit(x) {
+    const chars = Array.from({ length: 8 }, () => Math.random() < .5 ? '0' : '1');
+    return { x, chars, encrypted: (++nBits % 2) === 0 };
+  }
+
+  function targetBitCount() {
+    const bitW = charW * 8;
+    return Math.max(2, Math.ceil(Math.max(0, bitsEnd - bitsStart) / bitW) + 1);
+  }
+
+  /* Before the first message arrives, keep the binary field completely still
+     and invisible. On a resize after activation, rebuild a full moving belt. */
+  function seedBits() {
+    bits = [];
+    nBits = 0;
+    bitFillProgress = 0;
+    if (!bitsStarted) return;
+    const bitW = charW * 8;
+    const count = targetBitCount();
+    for (let i = 0; i < count; i++) bits.push(makeBit(bitsStart - bitW + i * bitW));
+  }
+
+  function startBits() {
+    if (bitsStarted) return;
+    bitsStarted = true;
+    bits = [];
+    nBits = 0;
+    bitFillProgress = 0;
+    const bitW = charW * 8;
+    /* The first group begins just outside the left edge, then rolls in. */
+    bits.push(makeBit(bitsStart - bitW));
+  }
+
+  function advanceBits(dx) {
+    if (!bitsStarted || !bits.length) return;
+    const bitW = charW * 8;
+    bits.forEach(b => { b.x += dx; });
+
+    /* Fill the right-hand lane one group at a time. Once it is full, recycle
+       the leading group to the far left so spacing and speed stay constant. */
+    if (bits.length < targetBitCount()) {
+      bitFillProgress += dx;
+      while (bitFillProgress >= bitW && bits.length < targetBitCount()) {
+        bitFillProgress -= bitW;
+        bits.unshift(makeBit(bits[0].x - bitW));
+      }
+    } else {
+      while (bits.length && bits[bits.length - 1].x >= bitsEnd) {
+        const leaving = bits.pop();
+        leaving.x = bits.length ? bits[0].x - bitW : bitsStart - bitW;
+        leaving.chars = Array.from({ length: 8 }, () => Math.random() < .5 ? '0' : '1');
+        leaving.encrypted = (++nBits % 2) === 0;
+        bits.unshift(leaving);
+      }
+    }
+  }
+
+  function seedCards() {
+    cards = [];
+    const first = createMessage();
+    first.x = reduced.matches ? 0 : -first.w; // start fully beyond the left edge
+    cards.push(first);
+    appendBehind();
+  }
+
+  function advance(dt) {
+    const dx = SPEED * dt;
+    cards.forEach(card => { card.x += dx; });
+
+    /* Start the data/encryption stream only when the leading edge of the
+       first message reaches the computer's left edge. */
+    if (!bitsStarted && cards.length && cards[0].x + cards[0].w >= msgEnd) startBits();
+
+    /* Once a card is fully under the computer, remove it. The sequence index
+       wraps, so the message conveyor never runs out. */
+    while (cards.length && cards[0].x >= msgEnd) cards.shift();
+
+    /* Refill the left end only as its last card begins entering the screen.
+       All cards share one velocity; none are teleported into view. */
+    if (!cards.length) {
+      const first = createMessage();
+      first.x = -first.w;
+      cards.push(first);
+    }
+    const tail = cards[cards.length - 1];
+    if (tail.x + tail.w >= 0) appendBehind();
+    while (cards.length < 2) appendBehind();
+
+    /* Binary groups remain frozen until startBits(), then roll forever. */
+    advanceBits(dx);
+  }
+
+  function render() {
+    if (!W) return;
+    ctx.clearRect(0, 0, W, H);
+    ctx.textBaseline = 'middle';
+
+    /* Each card is clipped at the screen edge and the monitor edge. Because
+       it begins off-canvas and moves at constant speed, it rolls in naturally. */
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, y - 40, msgEnd, 80);
+    ctx.clip();
+    ctx.font = msgFont;
+    ctx.textAlign = 'left';
+    cards.forEach(m => {
+      if (m.x + m.w <= 0 || m.x >= msgEnd) return;
+      const h = cardH, yy = y - h / 2;
+      const bx = m.x, by = yy, bw = m.w, bh = h;
+      const grad = ctx.createLinearGradient(bx, 0, bx + bw, 0);
+      grad.addColorStop(0, 'rgba(' + bitColor + ',.07)');
+      grad.addColorStop(1, 'rgba(' + bitColor + ',.13)');
+      ctx.fillStyle = grad;
+      ctx.strokeStyle = 'rgba(' + bitColor + ',.28)';
+      ctx.lineWidth = 1;
+      const r = 8;
+      ctx.beginPath();
+      ctx.moveTo(bx + r, by); ctx.lineTo(bx + bw - r, by);
+      ctx.quadraticCurveTo(bx + bw, by, bx + bw, by + r);
+      ctx.lineTo(bx + bw, by + bh - r);
+      ctx.quadraticCurveTo(bx + bw, by + bh, bx + bw - r, by + bh);
+      ctx.lineTo(bx + r, by + bh);
+      ctx.quadraticCurveTo(bx, by + bh, bx, by + bh - r);
+      ctx.lineTo(bx, by + r);
+      ctx.quadraticCurveTo(bx, by, bx + r, by);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = muted;
+      ctx.font = msgFont;
+      ctx.fillText(m.icon, bx + 9, by + 15);
+      ctx.fillText(m.meta, bx + 34, by + 14, Math.max(40, bw - 46));
+      ctx.fillStyle = bodyColor;
+      ctx.font = msgBodyFont;
+      const lineStart = by + 31;
+      m.lines.forEach((line, index) => {
+        ctx.fillText(line, bx + 34, lineStart + index * (W < 700 ? 11 : 13), Math.max(40, bw - 46));
+      });
+    });
+    ctx.restore();
+
+    /* Red binary groups begin only after the first message reaches the
+       computer. They enter from the left and then loop as a continuous belt. */
+    if (bitsStarted) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(bitsStart, y - 18, Math.max(0, bitsEnd - bitsStart), 36);
+      ctx.clip();
+      ctx.font = bitFont;
+      ctx.textAlign = 'center';
+      bits.forEach(b => {
+        ctx.fillStyle = 'rgb(' + hot + ')';
+        for (let i = 0; i < 8; i++) ctx.fillText(b.chars[i], b.x + i * charW + charW / 2, y);
+      });
+      ctx.restore();
+    }
+  }
+
+  function paused() { return scrollY > innerHeight * .72; }
+  function frame(now) {
+    raf = 0;
+    if (paused()) { last = 0; return; }
+    const dt = last ? Math.min((now - last) / 1000, .05) : 0;
+    last = now;
+    advance(dt); render();
+    raf = requestAnimationFrame(frame);
+  }
+  function start() {
+    if (!raf && !reduced.matches && !paused()) raf = requestAnimationFrame(frame);
+  }
+
+  function build() {
+    const oldEnd = msgEnd;
+    const oldFront = cards.length ? cards[0].x : null;
+    const saved = cards.map(m => ({ icon: m.icon, app: m.app, sender: m.sender, body: m.rawText }));
+    if (!dimensions()) return;
+
+    if (!saved.length) {
+      seedCards();
+    } else {
+      const frontProgress = oldEnd > 0 ? oldFront / oldEnd : -1;
+      cards = saved.map(m => fitMessage(m));
+      cards[0].x = reduced.matches ? Math.max(0, frontProgress * msgEnd) : frontProgress * msgEnd;
+      for (let i = 1; i < cards.length; i++) {
+        cards[i].x = cards[i - 1].x - cards[i].w - cardGap;
+      }
+      while (cards.length < 2) appendBehind();
+    }
+    seedBits();
+    render();
+    start();
+  }
+
+  new ResizeObserver(() => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(build, 100);
+  }).observe(cv);
+  addEventListener('scroll', start, { passive: true });
+  if (reduced.addEventListener) reduced.addEventListener('change', build);
+  new MutationObserver(() => { updateColors(); render(); }).observe(document.documentElement, { attributes: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
+  build();
+})();
+</script>
+</body>
+</html>
